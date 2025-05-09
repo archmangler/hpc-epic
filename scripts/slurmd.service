@@ -1,0 +1,16 @@
+# /etc/systemd/system/slurmd.service
+
+[Unit]
+Description=Slurm node daemon
+After=network.target munge.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/sbin/slurmd -D
+PIDFile=/var/run/slurmd.pid
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
