@@ -47,14 +47,14 @@
 
 * Having defined the high level tiers of the system we can now drill down into each tier to produce the actual cluster design. This is also high level but it begins to illustrate the relationships between the tiers and what those tiers are composed of.
 
-High Level Model:
+**High Level Model:**
 
 * The architecture primarily consists of two major components:
 
 - 400Gbps network fabric for GPU data communication, including routed communications over a high capacity network core router (L3 switch / "Spine") and L2 ToR switches 
 - GPU Compute nodes which bundle GPU, Control-Compute, Volatile Scratch memory and Local Storage in each node rack. Each rack should come with advanced cooling (ideally liquid immersion cooling)
 
-Rack Design:
+**Rack Design:**
 
 - 8 GPU nodes per rack (each node: 8x H100 SXM, 2x AMD EPYC, 4TB DDR5)
 - 1 Top-of-Rack InfiniBand switch (NDR 400Gbps)
@@ -62,15 +62,15 @@ Rack Design:
 - ConnectX-7 NICs (per node) with RoCEv2 enabled
 - BlueField-3 DPU per node for storage + network offload
 
-Network Desig:
+**Network Design:**
 
 - Leaf and Spine in detail ...?
 
-Storage Design:
+**Storage Design:**
 
 - Storage is provisioned and accessed ... ?
 
-"Frontend Network" (Application Network)
+**"Frontend Network" (Application Network)**
 
 - Applications, and ML pipelines access the compute results ... ?
 
@@ -109,7 +109,3 @@ Storage Design:
 
 * Overall Hardware Performance for standardised loads 
 * O.S and Middleware performance benchmarks
-
-
-
-
