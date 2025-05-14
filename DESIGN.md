@@ -42,8 +42,9 @@
 4. Storage Layer: Fast scratch + model checkpoint	NVMe SSDs, Lustre or BeeGFS
 5. Cooling Layer:	Immersion-ready design	Single-phase immersion, Smart enclosure layout
 6. Security Layer: Segmented data planes & telemetry (Remote Server Management Protocols e.g iDrac, LOM/ILOM) NVIDIA BlueField DPU (isolate ML pipeline control plane)
+7. Middleware Layer: Parallel Job Schedulers, HPC Operating System, Frameworks for distributed training: PyTorch (torch.distributed), ensorFlow (via Horovod or XLA), MXNet, JAX, and more
 
-### Produce a "Skeleton Design" of the Cluster
+### Produce a "Skeleton Design" of the Cluster Architecture
 
 * Having defined the high level tiers of the system we can now drill down into each tier to produce the actual cluster design. This is also high level but it begins to illustrate the relationships between the tiers and what those tiers are composed of.
 
@@ -64,14 +65,48 @@
 
 **Network Design:**
 
-- Leaf and Spine in detail ...?
+- Leaf and Spine network and components in detail ...?
 
 **Storage Design:**
 
-- Storage is provisioned and accessed ... ?
+- Storage is provisioned and accessed how ... ?
+- What is the use of Node-local NVMe for temporary data (checkpointing, "scratch space")
+- Parallel FS for model checkpoints (what PFS do we use)
+- Optionally, integrate object storage for artifact retention
+
+**Security Design**
+
+* Data segregation
+* Communication segregation
+* Data protection at rest and in flight
+* Management/Control Plane sgregation from Data Plane
+* Defining Dev/Prod/UAT in an HPC environment?
+* Access control, Secrets Management
+* Standards Compliance ?
+
+**Efficiency, Cooling & Sustainability Design**
+
+As carbon efficiency is becoming more and more desired and energy conservation is becoming a practical need, you’ll want to:
+
+1. Explore immersion-ready chassis for compute node rack (e.g., Asperitas or Submer)
+2. Reduce cooling overheads (PUE → < 1.05) ... Define PUE, what does "< 1.05" mean?
+3. Include DPU telemetry (BlueField SmartNIC to monitor + enforce QoS) ... How does this relate to Sustainability?
+
+*Relevant Metrics:*
+
+* Energy per training run metric
+* Firmware and BIOS tuning for thermal optimization
+* Sustainable Metal Cloud integration (if hybrid or cloud-deployed)
+
+*Explore further:*
+
+- Energy per training run metric
+- Firmware and BIOS tuning for thermal optimization
+- Sustainable Metal Cloud integration (if hybrid or cloud-deployed)
 
 **"Frontend Network" (Application Network)**
 
+- How do the user applications access the results of the HPC cluster (assuming the result is a properly trained LLM model)
 - Applications, and ML pipelines access the compute results ... ?
 
 ### Quantify: Put some numbers to the "Skeleton Design"
@@ -92,6 +127,10 @@
 1. Explain why you choose SXM vs PCIe GPUs
 2. Show awareness of NUMA boundaries, memory locality
 3. Talk through DPU offload use cases (storage, networking, telemetry)
+4. Why NCCL?
+5. Why RDMA and RoCE?
+6. What is NVLink and why do we need it?
+7. What's NVMe?
 
 ### Workload Mapping for Scaling Assessment
 
@@ -106,6 +145,5 @@
 ## Benchmarking our Solution
 
 * Having completed the design and assessed the high level performance capabilities and parameters, benchmark your design
-
-* Overall Hardware Performance for standardised loads 
-* O.S and Middleware performance benchmarks
+* Overall Hardware Performance for standardised loads (??? what hardware benchmarking tools to use?) 
+* O.S and Middleware performance benchmarks (MLperf for machine learning workload performance benchmarking)
